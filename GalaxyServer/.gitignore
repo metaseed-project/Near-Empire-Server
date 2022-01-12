@@ -40,6 +40,9 @@ lerna-debug.log*
 !example.env
 
 *.json
+
+!package.json
+!package-lock.json
 *.csv
 *.DS_Store
 Graph.html
