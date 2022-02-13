@@ -12,6 +12,7 @@ const dataSchema = mongoose.Schema(
     // z: Number,
     options: {
       maxOcupation: { type: Number, default: 10000 },
+      defaultOcupation: { type: Number, default: 10000 },
       clanOcupation: {}
     },
     sector: String,

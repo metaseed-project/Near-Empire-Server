@@ -7,7 +7,8 @@ async function update() {
   const planets = await planetsSchema.find();
   for (const p of planets) {
 
-    const maxOcupation = (p.options.maxOcupation || 10000) + 100 * p.mines.length;
+    const maxOcupation = defaultOcupation + 100 * p.mines.length;
+    p.options.maxOcupation = maxOcupation;
 
     const prevDict = { ...p.options.clanOcupation };
     for (const m of p.mines) {
