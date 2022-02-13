@@ -3,7 +3,10 @@ const mongoose = require('mongoose');
 const dataSchema = mongoose.Schema(
   {
     name: String,
-    mines: [],
+    mines: {
+      type: Array,
+      default: () => []
+    },
     // x: Number,
     // y: Number,
     // z: Number,
