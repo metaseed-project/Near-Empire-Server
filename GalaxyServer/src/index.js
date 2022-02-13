@@ -20,6 +20,7 @@ app.get('/addMiner', async (req, res) => {
   const mineType = req.query.mineType;
   
   const planet = await planetsSchema.findOne({ name });
+  if(!planet) res.send({ err: "no planet found" });
 
   planet.mines.push({
     clanId,
