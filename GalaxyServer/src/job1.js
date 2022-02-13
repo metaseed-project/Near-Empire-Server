@@ -8,7 +8,6 @@ async function update() {
   for (const p of planets) {
 
     const maxOcupation = (p.options.maxOcupation || 10000) + 100 * p.mines.length;
-    if(p.options.maxOcupation != maxOcupation) p.options.maxOcupation = maxOcupation;
 
     const prevDict = { ...p.options.clanOcupation };
     for (const m of p.mines) {
