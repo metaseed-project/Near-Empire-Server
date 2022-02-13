@@ -14,6 +14,23 @@ app.get('/getPlanets', async (req, res) => {
   res.send(planets);
 });
 
+app.get('/addMiner', async (req, res) => {
+  const name = req.query.name;
+  const clanId = req.query.clanId;
+  const mineType = req.query.mineType;
+  
+  const planet = await planetsSchema.findOne({ name });
+
+  planet.mines.push({
+    clanId,
+    mineType,
+  });
+
+  await planet.save();
+
+  res.send({});
+});
+
 app.get('/getPlanet', async (req, res) => {
   const x = req.query.x;
   const y = req.query.y;
