@@ -32,6 +32,20 @@ app.get('/addMiner', async (req, res) => {
   res.send({});
 });
 
+app.get('/addIndex', async (req, res) => {
+  const planet = await planetsSchema.findOne({ name: "counter" });
+  
+  planet.options.defaultOcupation++;
+  await planet.save();
+
+  res.send({});
+});
+
+app.get('/getIndex', async (req, res) => {
+  const planet = await planetsSchema.findOne({ name: "counter" });
+  res.send({ index: planet.options.defaultOcupation });
+});
+
 app.get('/getPlanet', async (req, res) => {
   const x = req.query.x;
   const y = req.query.y;
