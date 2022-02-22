@@ -1,5 +1,5 @@
 const express = require('express');
-const { planetsSchema } = require('./database');
+const { planetsSchema, playersSchema } = require('./database');
 const { mintNft } = require('./mint');
 const config = require('./core/config');
 const app = express();
@@ -28,15 +28,6 @@ app.get('/addMiner', async (req, res) => {
     mineType,
   });
 
-  await planet.save();
-
-  res.send({});
-});
-
-app.get('/addIndex', async (req, res) => {
-  const planet = await planetsSchema.findOne({ name: "counter" });
-  
-  planet.options.defaultOcupation++;
   await planet.save();
 
   res.send({});
@@ -72,18 +63,50 @@ app.get('/couldMint', async (req, res) => {
   res.send({ status: planet.minted.indexOf(to) == -1 });
 });
 
+app.get('/addIndex', async (req, res) => {
+  const planet = await planetsSchema.findOne({ name: "counter" });
+  
+  planet.options.defaultOcupation++;
+  await planet.save();
+
+  res.send({});
+});
+
 app.get('/getIndex', async (req, res) => {
   const planet = await planetsSchema.findOne({ name: "counter" });
   res.send({ index: planet.options.defaultOcupation });
 });
 
-app.get('/getPlanet', async (req, res) => {
-  const x = req.query.x;
-  const y = req.query.y;
-  const z = req.query.z;
+app.get('/updatePlayer', async (req, res) => {
+  const account = req.query.account;
+  const fuel = req.query.fuel;
+  const artifact1 = req.query.artifact1;
+  const artifact2 = req.query.artifact2;
+  const artifact3 = req.query.artifact3;
+  const mint = req.query.mint;
+  
+  const player = await playersSchema.findOne({ account });
+  if(!player) return res.send({ status: false });
+  
+  if(fuel) player.data.fuel = fuel;
+  if(artifact1) player.data.artifact1 = artifact1;
+  if(artifact2) player.data.artifact2 = artifact2;
+  if(artifact3) player.data.artifact3 = artifact3;
+  if(mint) player.data.minted.push(mint);
+  await player.save();
 
-  const planet = await planetsSchema.findOne({ x, y, z });
-  res.send(planet ? [planet] : []);
+  res.send({});
+});
+
+app.get('/getPlayer', async (req, res) => {
+  const account = req.query.account;
+  const player = await playersSchema.findOne({ account });
+  if(!player) {
+    const newPlayer = new playersSchema({account});
+    await newPlayer.save();
+    return res.send(newPlayer);
+  }
+  res.send(player);
 });
 
 app.listen(port, () => {

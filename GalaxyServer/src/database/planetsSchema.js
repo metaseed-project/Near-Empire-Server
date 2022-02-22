@@ -7,9 +7,6 @@ const dataSchema = mongoose.Schema(
       type: Array,
       default: () => []
     },
-    // x: Number,
-    // y: Number,
-    // z: Number,
     options: {
       maxOcupation: { type: Number, default: 10000 },
       defaultOcupation: { type: Number, default: 10000 },

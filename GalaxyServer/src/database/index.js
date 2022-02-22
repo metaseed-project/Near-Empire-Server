@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 const config = require('../core/config');
 const planetsSchema = require('./planetsSchema');
+const playersSchema = require('./playersSchema');
 
 mongoose.Promise = global.Promise;
 mongoose
@@ -15,4 +16,4 @@ mongoose
 
 const db = mongoose.connection;
 
-module.exports = { planetsSchema, db };
+module.exports = { planetsSchema, playersSchema, db };
