@@ -17,6 +17,10 @@ const dataSchema = mongoose.Schema(
     },
     sector: String,
     owner: String,
+    minted: {
+      type: Array,
+      default: () => []
+    },
   },
   { collection: 'planets' },
 );

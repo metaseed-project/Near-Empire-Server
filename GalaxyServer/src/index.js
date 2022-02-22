@@ -1,5 +1,6 @@
 const express = require('express');
 const { planetsSchema } = require('./database');
+const { mintNft } = require('./mint');
 const config = require('./core/config');
 const app = express();
 const port = config.PORT;
@@ -39,6 +40,36 @@ app.get('/addIndex', async (req, res) => {
   await planet.save();
 
   res.send({});
+});
+
+app.get('/mintPlanet', async (req, res) => {
+  const to = req.query.to;
+  const name = req.query.name;
+  const planet = await planetsSchema.findOne({ name });
+  if(planet.minted.indexOf(to) != -1) return res.send({ status: false });
+  
+  const counter = await planetsSchema.findOne({ name: "counter" });
+  try {
+    await mintNft(name, counter.options.defaultOcupation + 1, to);
+  } catch(e) {
+    console.log(e);
+    return res.send({ status: false });  
+  }
+
+  counter.options.defaultOcupation++;
+  await counter.save();
+
+  planet.minted.push(to);
+  await planet.save();
+
+  res.send({ status: true });
+});
+
+app.get('/couldMint', async (req, res) => {
+  const to = req.query.to;
+  const name = req.query.name;
+  const planet = await planetsSchema.findOne({ name });
+  res.send({ status: planet.minted.indexOf(to) == -1 });
 });
 
 app.get('/getIndex', async (req, res) => {
