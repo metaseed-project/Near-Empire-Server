@@ -37,7 +37,8 @@ app.get('/mintPlanet', async (req, res) => {
   const to = req.query.to;
   const name = req.query.name;
   const planet = await planetsSchema.findOne({ name });
-  if(planet.minted.indexOf(to) != -1) return res.send({ status: false });
+  if(!planet) return res.send({ status: false });
+  if(planet.data.minted.indexOf(to) != -1) return res.send({ status: false });
   
   const counter = await planetsSchema.findOne({ name: "counter" });
   try {
