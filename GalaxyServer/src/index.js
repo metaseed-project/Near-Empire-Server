@@ -47,6 +47,12 @@ app.get('/mintPlanet', async (req, res) => {
     return res.send({ status: false });  
   }
 
+  const player = await playersSchema.findOne({ account: to });
+  if(!player) {
+    player.data.minted.push(name);
+    await player.save();
+  }
+
   counter.options.defaultOcupation++;
   await counter.save();
 
