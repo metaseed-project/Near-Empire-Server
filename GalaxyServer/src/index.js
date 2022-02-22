@@ -34,31 +34,27 @@ app.get('/addMiner', async (req, res) => {
 });
 
 app.get('/mintPlanet', async (req, res) => {
-  const to = req.query.to;
-  const name = req.query.name;
-  const planet = await planetsSchema.findOne({ name });
-  if(!planet) return res.send({ status: false });
-  if(planet.data.minted.indexOf(to) != -1) return res.send({ status: false });
+  const account = req.query.to;
+  const planetName = req.query.name;
+  
+  const player = await playersSchema.findOne({ account });
+
+  if(!player) return res.send({ status: false });
+  if(player.data.minted.indexOf(planetName) != -1) return res.send({ status: false });
   
   const counter = await planetsSchema.findOne({ name: "counter" });
   try {
-    await mintNft(name, counter.options.defaultOcupation + 1, to);
+    await mintNft(planetName, counter.options.defaultOcupation + 1, account);
   } catch(e) {
     console.log(e);
     return res.send({ status: false });  
   }
 
-  const player = await playersSchema.findOne({ account: to });
-  if(!player) {
-    player.data.minted.push(name);
-    await player.save();
-  }
+  player.data.minted.push(planetName);
+  await player.save();
 
   counter.options.defaultOcupation++;
   await counter.save();
-
-  planet.minted.push(to);
-  await planet.save();
 
   res.send({ status: true });
 });

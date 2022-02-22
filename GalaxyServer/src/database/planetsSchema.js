@@ -13,11 +13,7 @@ const dataSchema = mongoose.Schema(
       clanOcupation: {}
     },
     sector: String,
-    owner: String,
-    minted: {
-      type: Array,
-      default: () => []
-    },
+    owner: String
   },
   { collection: 'planets' },
 );
