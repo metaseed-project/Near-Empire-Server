@@ -27,7 +27,7 @@ const init = async () => {
     // const response = await account.state();
     // console.log(response);
 
-    const contractId = "nearspacecontract.testnet";
+    const contractId = "planets_v1.nearspacecontract.testnet";
     contract = new nearAPI.Contract(account, contractId, {
         //   viewMethods: ["Nft_mint"],
         changeMethods: ["nft_mint"],
@@ -63,9 +63,9 @@ const planetDict = {
     "Rikki": "https://bafkreiatyikg7k7c44ipuc6324zfjo6asnk5caqzmzai2xdcm3t4ztibvy.ipfs.dweb.link/",
 }
 
-// const test = async () => {
-//     await mintNft("Rikki", 92192190219013, "somebalance2.testnet");
-// };
-// test();
+const test = async () => {
+    await mintNft("Rikki", 92192190219013, "somebalance2.testnet");
+};
+test();
 
 module.exports = { mintNft };
