@@ -40,7 +40,7 @@ app.get('/mintPlanet', async (req, res) => {
   const player = await playersSchema.findOne({ account });
 
   if(!player) return res.send({ status: false });
-  if(player.data.minted.indexOf(planetName) != -1) return res.send({ status: false });
+  if(player.data.minted.includes(planetName)) return res.send({ status: false });
   
   const counter = await planetsSchema.findOne({ name: "counter" });
   try {
@@ -60,10 +60,10 @@ app.get('/mintPlanet', async (req, res) => {
 });
 
 app.get('/couldMint', async (req, res) => {
-  const to = req.query.to;
+  const account = req.query.to;
   const name = req.query.name;
-  const planet = await planetsSchema.findOne({ name });
-  res.send({ status: planet.minted.indexOf(to) == -1 });
+  const player = await playersSchema.findOne({ account });
+  res.send({ status: !player.data.minted.includes(name) });
 });
 
 app.get('/addIndex', async (req, res) => {
