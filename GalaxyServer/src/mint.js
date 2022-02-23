@@ -51,7 +51,7 @@ const mintNft = async (name, counter, receiver_id) => {
     await contract.nft_mint({
         args: meta,
         gas: "300000000000000",
-        amount: "6640000000000000000000",
+        amount: "8040000000000000000000",
     });
 };
 
