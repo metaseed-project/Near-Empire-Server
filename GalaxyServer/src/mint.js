@@ -27,7 +27,7 @@ const init = async () => {
     // const response = await account.state();
     // console.log(response);
 
-    const contractId = "planets.nearspace3.registry4.metaseed.testnet";
+    const contractId = "nearspacecontract.testnet";
     contract = new nearAPI.Contract(account, contractId, {
         //   viewMethods: ["Nft_mint"],
         changeMethods: ["nft_mint"],
