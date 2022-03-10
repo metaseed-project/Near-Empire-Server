@@ -12,7 +12,7 @@ app.get('/getPlanets', async (req, res) => {
 
   const planets = await planetsSchema.find({ sector });
 
-  res.send(planets);
+  return res.send(planets);
 });
 
 app.get('/addMiner', async (req, res) => {
@@ -21,7 +21,7 @@ app.get('/addMiner', async (req, res) => {
   const mineType = req.query.mineType;
 
   const planet = await planetsSchema.findOne({ name });
-  if (!planet) res.send({ err: "no planet found" });
+  if (!planet) return res.send({ err: "no planet found" });
 
   planet.mines.push({
     clanId,
@@ -30,7 +30,7 @@ app.get('/addMiner', async (req, res) => {
 
   await planet.save();
 
-  res.send({});
+  return res.send({});
 });
 
 app.get('/mintPlanet', async (req, res) => {
@@ -56,14 +56,14 @@ app.get('/mintPlanet', async (req, res) => {
   counter.options.defaultOcupation++;
   await counter.save();
 
-  res.send({ status: true });
+  return res.send({ status: true });
 });
 
 app.get('/couldMint', async (req, res) => {
   const account = req.query.to;
   const name = req.query.name;
   const player = await playersSchema.findOne({ account });
-  res.send({ status: !player.data.minted.includes(name) });
+  return res.send({ status: !player.data.minted.includes(name) });
 });
 
 app.get('/addIndex', async (req, res) => {
@@ -72,12 +72,12 @@ app.get('/addIndex', async (req, res) => {
   planet.options.defaultOcupation++;
   await planet.save();
 
-  res.send({});
+  return res.send({});
 });
 
 app.get('/getIndex', async (req, res) => {
   const planet = await planetsSchema.findOne({ name: "counter" });
-  res.send({ index: planet.options.defaultOcupation });
+  return res.send({ index: planet.options.defaultOcupation });
 });
 
 app.get('/updatePlayer', async (req, res) => {
@@ -99,14 +99,14 @@ app.get('/updatePlayer', async (req, res) => {
   if (artifact1) newData.artifact1 = Number(artifact1);
   if (artifact2) newData.artifact2 = Number(artifact2);
   if (artifact3) newData.artifact3 = Number(artifact3);
-  if (networkId) newData.networkId = Number(networkId);
-  if (nftLink) newData.nftLink = Number(nftLink);
+  if (networkId) newData.networkId = String(networkId);
+  if (nftLink) newData.nftLink = String(nftLink);
   if (mint) newData.minted.push(mint);
 
   player.data = newData;
   await player.save();
 
-  res.send({});
+  return res.send({});
 });
 
 app.get('/getPlayer', async (req, res) => {
@@ -117,16 +117,17 @@ app.get('/getPlayer', async (req, res) => {
     await newPlayer.save();
     return res.send(newPlayer);
   }
-  res.send(player);
+  return res.send(player);
 });
 
 app.get('/getPlayerQuery', async (req, res) => {
   const networkId = req.query.networkId;
+  console.log(networkId);
   const player = await playersSchema.findOne({ "data.networkId": networkId });
   if (!player) {
-    res.send({ status: false });
+    return res.send({ status: false });
   }
-  res.send(player);
+  return res.send(player);
 });
 
 app.listen(port, () => {
