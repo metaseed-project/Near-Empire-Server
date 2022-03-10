@@ -120,6 +120,15 @@ app.get('/getPlayer', async (req, res) => {
   res.send(player);
 });
 
+app.get('/getPlayerQuery', async (req, res) => {
+  const networkId = req.query.networkId;
+  const player = await playersSchema.findOne({ "data.networkId": networkId });
+  if (!player) {
+    res.send({ status: false });
+  }
+  res.send(player);
+});
+
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
 });
