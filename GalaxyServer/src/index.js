@@ -86,6 +86,8 @@ app.get('/updatePlayer', async (req, res) => {
   const artifact1 = req.query.artifact1;
   const artifact2 = req.query.artifact2;
   const artifact3 = req.query.artifact3;
+  const networkId = req.query.networkId;
+  const nftLink = req.query.nftLink;
   const mint = req.query.mint;
 
   const player = await playersSchema.findOne({ account });
@@ -97,6 +99,8 @@ app.get('/updatePlayer', async (req, res) => {
   if (artifact1) newData.artifact1 = Number(artifact1);
   if (artifact2) newData.artifact2 = Number(artifact2);
   if (artifact3) newData.artifact3 = Number(artifact3);
+  if (networkId) newData.networkId = Number(networkId);
+  if (nftLink) newData.nftLink = Number(nftLink);
   if (mint) newData.minted.push(mint);
 
   player.data = newData;
