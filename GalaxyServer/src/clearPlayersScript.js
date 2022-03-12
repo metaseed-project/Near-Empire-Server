@@ -1,11 +1,6 @@
-const { playersSchema } = require('./database');
+const mongoose = require('mongoose');
+const { db } = require('./database');
 
-(async ()=>{
-  const players = await playersSchema.find();
-  for(const player of players){
-    console.log(player);
-    player.minted = [];
-    delete player.data.minted;
-    await player.save();
-  }
+(async () => {
+  await db.dropCollection('players')
 })();

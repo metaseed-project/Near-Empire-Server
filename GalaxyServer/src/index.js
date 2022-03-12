@@ -50,8 +50,8 @@ app.get('/mintPlanet', async (req, res) => {
     return res.send({ status: false });
   }
 
-  player.minted.push(planetName);
-  await player.save();
+  const newMinted = [planetName, ...player.minted];
+  await player.update({ _id: player._id }, { minted: newMinted });
 
   counter.options.defaultOcupation++;
   await counter.save();
@@ -81,7 +81,6 @@ app.get('/updatePlayer', async (req, res) => {
   const artifact3 = req.query.artifact3;
   const networkId = req.query.networkId;
   const nftLink = req.query.nftLink;
-  const mint = req.query.mint;
 
   const player = await playersSchema.findOne({ account });
   if (!player) return res.send({ status: false });
@@ -94,10 +93,8 @@ app.get('/updatePlayer', async (req, res) => {
   if (artifact3) newData.artifact3 = Number(artifact3);
   if (networkId) newData.networkId = String(networkId);
   if (nftLink) newData.nftLink = String(nftLink);
-  if (mint) newData.minted.push(mint);
 
-  player.data = newData;
-  await player.save();
+  await player.update({ _id: player._id }, { data: newData }, { upsert: false });
 
   return res.send({});
 });
