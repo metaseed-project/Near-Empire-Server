@@ -40,8 +40,6 @@ app.get('/mintPlanet', async (req, res) => {
   const player = await playersSchema.findOne({ account });
 
   if (!player) return res.send({ status: false });
-
-  console.log("Minted:", player.minted);
   if (player.minted.includes(planetName)) return res.send({ status: false });
 
   const counter = await planetsSchema.findOne({ name: "counter" });
@@ -57,20 +55,9 @@ app.get('/mintPlanet', async (req, res) => {
 
   counter.options.defaultOcupation++;
   await counter.save();
-  console.log("Counter:", counter.options.defaultOcupation);
 
   return res.send({ status: true });
 });
-
-//
-//--- Depricated
-//
-// app.get('/couldMint', async (req, res) => {
-//   const account = req.query.to;
-//   const name = req.query.name;
-//   const player = await playersSchema.findOne({ account });
-//   return res.send({ status: !player.minted.includes(name) });
-// });
 
 app.get('/addIndex', async (req, res) => {
   const planet = await planetsSchema.findOne({ name: "counter" });
