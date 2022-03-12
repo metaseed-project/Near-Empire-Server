@@ -13,7 +13,7 @@ const dataSchema = mongoose.Schema(
         artifact1: 0,
         artifact2: 0,
         artifact3: 0,
-        networkId: { type: String, default: "" },
+        networkId: String,
         nftLink: "",
       })
     },
