@@ -51,7 +51,7 @@ app.get('/mintPlanet', async (req, res) => {
   }
 
   const newMinted = [planetName, ...player.minted];
-  await player.findOneAndUpdate({ _id: player._id }, { minted: newMinted });
+  await playersSchema.findOneAndUpdate({ _id: player._id }, { minted: newMinted });
 
   counter.options.defaultOcupation++;
   await counter.save();
@@ -94,7 +94,7 @@ app.get('/updatePlayer', async (req, res) => {
   if (networkId) newData.networkId = String(networkId);
   if (nftLink) newData.nftLink = String(nftLink);
 
-  await player.findOneAndUpdate({ _id: player._id }, { data: newData }, { upsert: false });
+  await playersSchema.findOneAndUpdate({ _id: player._id }, { data: newData }, { upsert: false });
 
   return res.send({});
 });
