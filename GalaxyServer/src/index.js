@@ -40,7 +40,9 @@ app.get('/mintPlanet', async (req, res) => {
   const player = await playersSchema.findOne({ account });
 
   if (!player) return res.send({ status: false });
-  if (player.data.minted.includes(planetName)) return res.send({ status: false });
+
+  console.log("Minted:", player.minted);
+  if (player.minted.includes(planetName)) return res.send({ status: false });
 
   const counter = await planetsSchema.findOne({ name: "counter" });
   try {
@@ -50,21 +52,25 @@ app.get('/mintPlanet', async (req, res) => {
     return res.send({ status: false });
   }
 
-  player.data.minted.push(planetName);
+  player.minted.push(planetName);
   await player.save();
 
   counter.options.defaultOcupation++;
   await counter.save();
+  console.log("Counter:", counter.options.defaultOcupation);
 
   return res.send({ status: true });
 });
 
-app.get('/couldMint', async (req, res) => {
-  const account = req.query.to;
-  const name = req.query.name;
-  const player = await playersSchema.findOne({ account });
-  return res.send({ status: !player.data.minted.includes(name) });
-});
+//
+//--- Depricated
+//
+// app.get('/couldMint', async (req, res) => {
+//   const account = req.query.to;
+//   const name = req.query.name;
+//   const player = await playersSchema.findOne({ account });
+//   return res.send({ status: !player.minted.includes(name) });
+// });
 
 app.get('/addIndex', async (req, res) => {
   const planet = await planetsSchema.findOne({ name: "counter" });
@@ -81,7 +87,7 @@ app.get('/getIndex', async (req, res) => {
 });
 
 app.get('/updatePlayer', async (req, res) => {
-  const account = req.query.account;
+  const account = String(req.query.account);
   const fuel = req.query.fuel;
   const artifact1 = req.query.artifact1;
   const artifact2 = req.query.artifact2;
@@ -110,7 +116,7 @@ app.get('/updatePlayer', async (req, res) => {
 });
 
 app.get('/getPlayer', async (req, res) => {
-  const account = req.query.account;
+  const account = String(req.query.account);
   const player = await playersSchema.findOne({ account });
   if (!player) {
     const newPlayer = new playersSchema({ account });
@@ -121,8 +127,7 @@ app.get('/getPlayer', async (req, res) => {
 });
 
 app.get('/getPlayerQuery', async (req, res) => {
-  const networkId = req.query.networkId;
-  console.log(networkId);
+  const networkId = String(req.query.networkId);
   const player = await playersSchema.findOne({ "data.networkId": networkId });
   if (!player) {
     return res.send({ status: false });

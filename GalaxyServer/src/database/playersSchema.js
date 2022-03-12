@@ -15,9 +15,9 @@ const dataSchema = mongoose.Schema(
         artifact3: 0,
         networkId: { type: String, default: "" },
         nftLink: "",
-        minted: [],
       })
     },
+    minted: { type : Array , default : [] },
   },
   { collection: 'players' },
 );
