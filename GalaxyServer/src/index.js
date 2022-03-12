@@ -91,7 +91,14 @@ app.get('/updatePlayer', async (req, res) => {
   if (artifact1) newData.artifact1 = Number(artifact1);
   if (artifact2) newData.artifact2 = Number(artifact2);
   if (artifact3) newData.artifact3 = Number(artifact3);
-  if (networkId) newData.networkId = String(networkId);
+  if (networkId) {
+    newData.networkId = String(networkId);
+    await playersSchema.updateMany(
+      { "data.networkId": String(networkId) },
+      { "data.networkId": -1 },
+      { upsert: false }
+    );
+  }
   if (nftLink) newData.nftLink = String(nftLink);
 
   await playersSchema.findOneAndUpdate({ _id: player._id }, { data: newData }, { upsert: false });
